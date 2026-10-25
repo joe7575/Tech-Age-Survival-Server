@@ -35,3 +35,16 @@ VS Code ".vscode\launch.json:
   ]
 }
 ```
+
+Minimal NanoC Beispiel:
+
+```
+// NanoC controller demo
+int32 count = 0;
+
+while (1) {
+    count = count + 1
+    printf("NanoC ready, count=%d\n", count)
+    sleep(1000)
+}
+```
