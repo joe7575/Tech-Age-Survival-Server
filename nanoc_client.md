@@ -158,14 +158,31 @@ das Terminal.
 
 ## 8. Verbindung testen (optional)
 
-Mit dem Token aus Schritt 4 kann die Bridge direkt geprüft werden:
+Am schnellsten mit `nanoc ping` (Token aus Schritt 4):
+
+```bat
+nanoc ping --host joesworld.ipv64.net --port 41100 --tls --tls-fingerprint "01:6A:FA:52:9C:F6:2A:C9:EA:DA:A9:A5:CB:9E:62:DA:3F:3B:BB:15:25:16:89:8B:8C:0E:83:64:F2:DA:10:7A" --token <TOKEN>
+```
+
+Erwartete Ausgabe (Nummer, Position und Version können abweichen):
+
+```text
+Controller <NUMMER> at (<X>, <Y>, <Z>) available
+  owner <NAME>, running, program loaded, nanoclib <VERSION>
+```
+
+`nanoc ping` prüft TLS, Token und Bridge und meldet, ob der Controller geladen
+ist, ob das Programm läuft und welche nanoclib-Version der Server verwendet.
+
+Für mehr Details:
 
 ```bat
 nanoc catalog --host joesworld.ipv64.net --port 41100 --tls --tls-fingerprint "01:6A:FA:52:9C:F6:2A:C9:EA:DA:A9:A5:CB:9E:62:DA:3F:3B:BB:15:25:16:89:8B:8C:0E:83:64:F2:DA:10:7A" --token <TOKEN>
+nanoc scan    --host joesworld.ipv64.net --port 41100 --tls --tls-fingerprint "01:6A:FA:52:9C:F6:2A:C9:EA:DA:A9:A5:CB:9E:62:DA:3F:3B:BB:15:25:16:89:8B:8C:0E:83:64:F2:DA:10:7A" --token <TOKEN> --radius 8
 ```
 
-Es kommt JSON mit dem Topic-Katalog zurück; damit sind TLS, Token und Bridge
-in Ordnung.
+`catalog` liefert den Topic-Katalog, `scan` die Techage-Anlage als JSON (der
+Controller-Bereich muss dafür geladen sein).
 
 ## 9. Fehlersuche
 
@@ -174,12 +191,15 @@ in Ordnung.
 - `bad token`: Token gehört zu einem anderen Controller oder ist veraltet.
 - `NOT_LOADED`: Der Controller-Bereich ist nicht geladen – in der Nähe bleiben
   oder forceloaden.
+- `nanoc ping` meldet `error: ping failed`: Das Server-Mod ist älter als das
+  INFO-Kommando; der Server-Owner muss NanoC aktualisieren und neu starten.
 - Zertifikat/Fingerprint: Der Server hat ein neues Zertifikat; neuen
   Fingerprint verwenden.
 - Extension findet den Adapter nicht: `nanoc.dapPath` auf
   `...\Scripts\nanoc-dap.exe` setzen (Schritt 3).
 - Keine Terminalausgabe: Terminal mit `@connect` verbunden? Programm
-  hochgeladen? Nach dem ersten F5 ggf. ein zweites F5 (Continue)?
+  hochgeladen? Nach dem ersten F5 ggf. ein zweites F5 (Continue)? Mit
+  `nanoc ping` prüfen, ob der Controller läuft.
 - `DEP0169`-Warnung bei der VSIX-Installation: harmlos.
 
 ---
@@ -338,13 +358,32 @@ terminal.
 
 ## 8. Test the connection (optional)
 
-With the token from step 4 you can check the bridge directly:
+The quickest check is `nanoc ping` (token from step 4):
+
+```bat
+nanoc ping --host joesworld.ipv64.net --port 41100 --tls --tls-fingerprint "01:6A:FA:52:9C:F6:2A:C9:EA:DA:A9:A5:CB:9E:62:DA:3F:3B:BB:15:25:16:89:8B:8C:0E:83:64:F2:DA:10:7A" --token <TOKEN>
+```
+
+Expected output (number, position and version may differ):
+
+```text
+Controller <NUMBER> at (<X>, <Y>, <Z>) available
+  owner <NAME>, running, program loaded, nanoclib <VERSION>
+```
+
+`nanoc ping` checks TLS, token and bridge and reports whether the controller is
+loaded, whether the program is running and which nanoclib version the server
+uses.
+
+For more detail:
 
 ```bat
 nanoc catalog --host joesworld.ipv64.net --port 41100 --tls --tls-fingerprint "01:6A:FA:52:9C:F6:2A:C9:EA:DA:A9:A5:CB:9E:62:DA:3F:3B:BB:15:25:16:89:8B:8C:0E:83:64:F2:DA:10:7A" --token <TOKEN>
+nanoc scan    --host joesworld.ipv64.net --port 41100 --tls --tls-fingerprint "01:6A:FA:52:9C:F6:2A:C9:EA:DA:A9:A5:CB:9E:62:DA:3F:3B:BB:15:25:16:89:8B:8C:0E:83:64:F2:DA:10:7A" --token <TOKEN> --radius 8
 ```
 
-It returns JSON with the topic catalog; this confirms TLS, token and bridge.
+`catalog` returns the topic catalog, `scan` the Techage plant as JSON (the
+controller area must be loaded for that).
 
 ## 9. Troubleshooting
 
@@ -352,10 +391,13 @@ It returns JSON with the topic catalog; this confirms TLS, token and bridge.
   reachable, or TLS fingerprint mismatch.
 - `bad token`: token belongs to another controller or is outdated.
 - `NOT_LOADED`: the controller area is not loaded – stay nearby or forceload.
+- `nanoc ping` reports `error: ping failed`: the server mod is older than the
+  INFO command; the server owner must update NanoC and restart the server.
 - Certificate/fingerprint: the server has a new certificate; use the new
   fingerprint.
 - Extension cannot find the adapter: set `nanoc.dapPath` to
   `...\Scripts\nanoc-dap.exe` (step 3).
 - No terminal output: is the terminal connected with `@connect`? Was the
   program uploaded? After the first F5, press F5 again (Continue) if needed.
+  Use `nanoc ping` to check whether the controller is running.
 - `DEP0169` warning during VSIX installation: harmless.
